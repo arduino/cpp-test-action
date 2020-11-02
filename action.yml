@@ -28,7 +28,7 @@ inputs:
 
 runs:
   using: composite
-  steps: 
+  steps:
     - name: Build tests
       shell: bash
       run: |
