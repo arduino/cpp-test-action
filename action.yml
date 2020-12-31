@@ -44,6 +44,11 @@ runs:
       run: |
         sudo snap install yq > /dev/null
 
+    - name: Update APT package lists
+      shell: bash
+      run: |
+        sudo apt-get update > /dev/null
+
     - name: Install Valgrind
       shell: bash
       run: |
@@ -54,7 +59,7 @@ runs:
       run: |
         if [[ -n "${{ inputs.runtime-path }}" ]]; then
           echo "::warning::The runtime-path input is deprecated. Please use runtime-paths instead."
-          RUNTIME_PATHS="${{ inputs.runtime-path }}"
+          RUNTIME_PATHS="- ${{ inputs.runtime-path }}"
         else
           RUNTIME_PATHS="${{ inputs.runtime-paths }}"
         fi
@@ -68,7 +73,7 @@ runs:
             echo "::error file=$runtimePath::While running $runtimePath"
           fi
           echo "::endgroup::"
-        done <<<"$(echo "$RUNTIME_PATHS" | yq read - [*])"
+        done <<<"$(echo "$RUNTIME_PATHS" | yq eval '.[]' -)"
         exit $EXIT_STATUS
 
     - name: Parse coverage-exclude-paths input
@@ -77,7 +82,7 @@ runs:
       run: |
         while IFS='' read -r excludePath && [[ -n "$excludePath" ]]; do
           excludePaths="$excludePaths $excludePath"
-        done <<<"$(echo "${{ inputs.coverage-exclude-paths }}" | yq read - [*])"
+        done <<<"$(echo "${{ inputs.coverage-exclude-paths }}" | yq eval '.[]' -)"
         # Make the parsed paths an output so it can be used by the next step
         echo "::set-output name=paths::$excludePaths"
 
