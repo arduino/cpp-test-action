@@ -44,6 +44,11 @@ runs:
       run: |
         sudo snap install yq > /dev/null
 
+    - name: Update APT package lists
+      shell: bash
+      run: |
+        sudo apt-get update > /dev/null
+
     - name: Install Valgrind
       shell: bash
       run: |
