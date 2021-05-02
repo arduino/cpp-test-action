@@ -62,7 +62,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: arduino/cpp-test-action@main
+      - uses: arduino/cpp-test-action@v1
         with:
           coverage-data-path: ${{ env.COVERAGE_DATA_PATH }}
 
