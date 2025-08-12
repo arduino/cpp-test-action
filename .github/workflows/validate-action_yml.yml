@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout local repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Download JSON schema for action.yml
         uses: carlosperate/download-file-action@v2
