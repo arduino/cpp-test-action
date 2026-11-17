@@ -39,10 +39,14 @@ runs:
         make --directory="${{ inputs.build-path }}"
         echo "::endgroup::"
 
-    - name: Install yq
+    - name: Check yq
       shell: bash
       run: |
-        sudo snap install yq > /dev/null
+        if ! yq --version 2> /dev/null | grep --quiet 'mikefarah.* v4\.'; then
+          echo "::error::mikefarah/yq v4 not found. It is expected to be preinstalled on the runner image."
+          exit 1
+        fi
+        yq --version
 
     - name: Update APT package lists
       shell: bash
